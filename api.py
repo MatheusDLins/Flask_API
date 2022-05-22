@@ -6,6 +6,7 @@ app = Flask(__name__)
 #Exibir utf-8 sem quebrar os caracters
 app.config['JSON_AS_ASCII'] = False
 
+
 #data atual
 datah=datetime.datetime.now()
 data_hoje = [datah.year, datah.month, datah.day]
@@ -152,7 +153,7 @@ def agendamento(sala_id:int):
             sala_data[sala_id]["ocupado"] = True
 
     else:
-        print("erro")
+        print("erro: sala já agendada")
     return response_sala()   
 
 app.run(debug=True)
