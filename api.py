@@ -14,28 +14,54 @@ sala_data = {
     1:{
         'id':1,
         'Sala': "Python Fundamentals",
-        "data": [2022,5,21],
-        "tempo":1,
+        "data_inicio": [2022,5,21],
+        "data_final":[2022,5,28],
         "ocupado": True
     },
     2: {
         'id':2,
         "Sala": "Python for API and Devops Integration",
-        "data": [2022,5,21],
-        "tempo":5,
+        "data_inicio": [2022,4,21],
+        "data_final":[2022,5,20],
         "ocupado": True
     }
 }
 
+
+
+
 def response_sala():
     return {"salas": list(sala_data.values())}
 
+#atualizacao
+#verificar data dos cursos
+def atualizar():
+    for i in sala_data:
+        data_teste1 = {x:sala_data[x]['data_inicio'] for x in range (1, len(sala_data)+1)}
+        data_ini = data_teste1[i]
 
+        data_teste2 = {x:sala_data[x]['data_final'] for x in range (1, len(sala_data)+1)}
+        data_fim = data_teste2[i]
+
+
+        ocupado = {x:sala_data[x]['ocupado'] for x in range (1, len(sala_data)+1)}
+        if data_hoje > data_ini and data_hoje > data_fim:
+
+            if i in sala_data:
+                sala_data[i]["data_inicio"] = [0000,0,00]
+                sala_data[i]["data_final"] = [0000,0,00]
+                sala_data[i]["ocupado"] = False
+    return response_sala()
+
+atualizar()
+
+#rota inicial
 @app.route("/")
 def list_sala():
     return response_sala()
 
-#def disponivel():
+
+    
 
 
 #Cadastrar uma nova sala de aula
@@ -54,8 +80,8 @@ def create_sala():
     sala_data[new_id] = {
         'id': new_id,
         'Sala': body["Sala"],
-        'data': body["data"],
-        'tempo': 0,
+        'data_inicio': [0000,0,00],
+        'data_final': [0000,0,00],
         'ocupado': False
 
 
@@ -78,15 +104,15 @@ def delete(sala_id: int):
 def update(sala_id:int):
     body = request.json
     sala = body.get("Sala")
-    data = body.get("data")
-    tempo = body.get("tempo")
-    ocupado = body.get("ocupado")
+    #data_inicio = body.get("data_inicio")
+    #data_final = body.get("data_final")
+    #ocupado = body.get("ocupado")
 
     if sala_id in sala_data:
         sala_data[sala_id]["Sala"] = sala
-        sala_data[sala_id]["data"] = data
-        sala_data[sala_id]["tempo"] = tempo
-        sala_data[sala_id]["ocupado"] = ocupado
+        #sala_data[sala_id]["data_inicio"] = data_inicio
+        #sala_data[sala_id]["data_final"] = data_final
+        #sala_data[sala_id]["ocupado"] = ocupado
 
     return response_sala()
 
@@ -101,28 +127,31 @@ def listar_salas():
 def busca_salas(nome):
     lista_de_salas = {x:sala_data[x]['Sala'] for x in range (1, len(sala_data)+1)}
     for i in lista_de_salas:
-        print(lista_de_salas[i])
         if lista_de_salas[i] == nome:
             return(sala_data[i])
             break
 
 #agendamento
 @app.route("/agendar/<int:sala_id>",methods=["PUT"])
-def agendamento(sala_id:int):
-    lista_de_salas = {x:sala_data[x]['ocupado'] for x in range (1, len(sala_data)+1)}
-    if lista_de_salas[sala_id] == False:
-        lista_de_salas[sala_id] = True
+def agendamento(sala_id:int):    
+
+    #verificando se a sala está ocupada
+    lista_de_ocupados = {x:sala_data[x]['ocupado'] for x in range (1, len(sala_data)+1)}
+
+    if lista_de_ocupados[sala_id] == False:
+        lista_de_ocupados[sala_id] = True
         body = request.json
-        data = body.get("data")
-        tempo = body.get("tempo")
+        data_inicio = body.get("data_inicio")
+        data_final = body.get("data_final")
+        ocupado = body.get("ocupado")
 
         if sala_id in sala_data:
-            sala_data[sala_id]["data"] = data
-            sala_data[sala_id]["tempo"] = tempo
+            sala_data[sala_id]["data_inicio"] = data_inicio
+            sala_data[sala_id]["data_final"] = data_final
             sala_data[sala_id]["ocupado"] = True
 
     else:
         print("erro")
-    return response_sala()
+    return response_sala()   
 
 app.run(debug=True)
