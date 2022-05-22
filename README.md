@@ -43,4 +43,4 @@ Podemos agendar Salas usando o método put e passando na url o número referente
 agendando = requests.put("http://127.0.0.1:5000/agendar/2",json={'data':[2022,8,22],'tempo':5})
 print(agendando.json())
 
-Aqui estamos agendando a sala 2 para o dia 22/08/2022 por 5 dias e o status dela caso não esteja ocupada ira ser mudado automaticamente asdkasdsad
+Aqui estamos agendando a sala 2 para o dia 22/08/2022 por 5 dias, o status dela caso não esteja ocupada ira ser mudado automaticamente.
