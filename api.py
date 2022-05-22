@@ -48,6 +48,7 @@ def atualizar():
         if data_hoje > data_ini and data_hoje > data_fim:
 
             if i in sala_data:
+                sala_data[i]["Sala"] = (f"Sala{i} livre")
                 sala_data[i]["data_inicio"] = [0000,0,00]
                 sala_data[i]["data_final"] = [0000,0,00]
                 sala_data[i]["ocupado"] = False
